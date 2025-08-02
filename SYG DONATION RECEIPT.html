@@ -266,29 +266,7 @@ function saveReceipt() {
             return;
         }
     }
-    alert("✅ Receipt saved successfully!");
-}
-
-function clearForm() {
-    document.querySelectorAll("input, textarea").forEach(el => {
-        if (el.type !== "date" && !el.readOnly) el.value = "";
-    });
-    document.getElementById("total").value = "";
-    document.getElementById("totalWords").value = "";
-}
-
-
-/*
-function saveReceipt() {
-    let requiredFields = document.querySelectorAll("input[required], textarea[required]");
-    for (let field of requiredFields) {
-        if (!field.value.trim()) {
-            alert("⚠️ Please fill all required fields.");
-            field.focus();
-            return;
-        }
-    }
-
+	
     let data = {
         receiptNumber: document.getElementById("receiptNumber").value,
         date: document.getElementById("date").value,
@@ -310,7 +288,7 @@ function saveReceipt() {
         paymentDetails: document.getElementById("paymentDetails").value
     };
 
-    fetch("YOUR_WEB_APP_URL", { // Replace with your Google Script Web App URL
+    fetch("https://script.google.com/macros/s/AKfycbw12x-98T8ZbJAiyLRQY7stDjYw-rls9cr0EbGUbBKHljhns9dW9OVFBW6sqh-rhrR4/exec", { // Replace with your Google Script Web App URL
         method: "POST",
         mode: "no-cors",
         headers: {
@@ -323,11 +301,18 @@ function saveReceipt() {
     }).catch(err => {
         alert("❌ Error saving data: " + err);
     });
+
 }
 
-*/
+function clearForm() {
+    document.querySelectorAll("input, textarea").forEach(el => {
+        if (el.type !== "date" && !el.readOnly) el.value = "";
+    });
+    document.getElementById("total").value = "";
+    document.getElementById("totalWords").value = "";
+}
+
 </script>
 
 </body>
 </html>
-
