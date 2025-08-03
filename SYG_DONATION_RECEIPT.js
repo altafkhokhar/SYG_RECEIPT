@@ -1,5 +1,6 @@
 
- async function createReceiptPDF() {
+ async function createReceiptPDF() {	 
+	 
       const { PDFDocument, StandardFonts, rgb } = PDFLib;
 
       const pdfDoc = await PDFDocument.create();
@@ -288,3 +289,25 @@
       }
       return num.toString();
     }
+	
+	function showOverlay() {
+		document.getElementById('overlay').style.display = 'flex';
+	}
+
+	function hideOverlay() {
+	  document.getElementById('overlay').style.display = 'none';
+	}
+
+	
+	function showToast(message, bgColor = "#333") {
+	  const toast = document.getElementById("toast");
+	  toast.style.background = bgColor;
+	  toast.innerHTML = message;
+	  toast.style.visibility = "visible";
+	  toast.style.opacity = "1";
+  
+	  setTimeout(() => {
+		toast.style.opacity = "0";
+		toast.style.visibility = "hidden";
+	  }, 5000);
+	}
