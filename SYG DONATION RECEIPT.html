@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <title>SIPAI SAMAJ TRUST - Receipt Entry</title>
 <style>
+
+
     body {
         font-family: Arial, sans-serif;
         background-color: #f7f9fc;
@@ -106,6 +108,9 @@
         opacity: 0.9;
     }
 </style>
+
+<script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+<script src="D:\FZ\FZ\SYG\SYG_DONATION_RECEIPT.js"></script>
 </head>
 <body>
 
@@ -229,6 +234,9 @@
 </div>
 
 <script>
+
+let data= null;
+
 function calculateTotal() {
     let fields = ["membershipFee", "donation", "zakatFund", "educationFund", "marriageFund", "widowFund"];
     let total = 0;
@@ -240,6 +248,7 @@ function calculateTotal() {
     document.getElementById("totalWords").value = numberToWords(total);
 }
 
+/*
 function numberToWords(num) {
     if (num === 0) return "Zero";
     let a = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 
@@ -256,6 +265,7 @@ function numberToWords(num) {
     }
     return inWords(Math.floor(num));
 }
+*/
 
 function saveReceipt() {
     let requiredFields = document.querySelectorAll("input[required], textarea[required]");
@@ -267,7 +277,7 @@ function saveReceipt() {
         }
     }
 	
-    let data = {
+    data = {
         receiptNumber: document.getElementById("receiptNumber").value,
         date: document.getElementById("date").value,
         name: document.getElementById("name").value,
@@ -296,7 +306,10 @@ function saveReceipt() {
         },
         body: JSON.stringify(data)
     }).then(() => {
-        alert("✅ Receipt saved successfully to Google Sheet!");
+        alert("✅ Receipt saved successfully to Google Sheet! Generating PDF.......");
+		
+		createReceiptPDF()
+		
         clearForm();
     }).catch(err => {
         alert("❌ Error saving data: " + err);
