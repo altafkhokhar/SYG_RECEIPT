@@ -98,7 +98,7 @@
 
       // --- Payer Details ---
       const name = data.name;
-      const address = data.address;
+      const address = data.address.replace(/[\r\n]+/g, '');
       const mobile = data.mobile;
       const city = data.city;
       const pincode = data.pincode;
@@ -106,7 +106,7 @@
 
       page.drawText("Name:", { x: 40, y: yCursor, size: 8, font: boldFont });
       page.drawText(name, { x: 140, y: yCursor, size: 8, font: normalFont });
-      yCursor -= 12;
+      yCursor -= 12;	 
 
       page.drawText("Address:", { x: 40, y: yCursor, size: 8, font: boldFont });
       page.drawText(address, { x: 140, y: yCursor, size: 8, font: normalFont });
