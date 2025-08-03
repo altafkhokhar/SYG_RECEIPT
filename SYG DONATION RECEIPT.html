@@ -107,6 +107,17 @@
     .btn:hover {
         opacity: 0.9;
     }
+	
+	#toast {
+		max-width: 80vw; /* Shrinks for small screens */
+		font-size: 13px; /* Slightly smaller text */
+	}
+
+	#overlay {
+		text-align: center;
+		padding: 20px; /* Better text spacing */
+	}
+
 </style>
 
 <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
@@ -233,6 +244,41 @@
     </div>
 </div>
 
+<div id="toast" style="
+  visibility: hidden;
+  min-width: 250px;
+  background: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 5px;
+  padding: 12px;
+  position: fixed;
+  z-index: 10000;
+  bottom: 20px;
+  right: 20px;
+  font-size: 14px;
+  opacity: 0;
+  transition: opacity 0.5s, visibility 0.5s;"></div>
+  
+  <div id="overlay" style="
+	  position: fixed;
+	  display: none;
+	  width: 100%;
+	  height: 100%;
+	  top: 0; left: 0;
+	  background: rgba(0,0,0,0.6);
+	  z-index: 9999;
+	  justify-content: center;
+	  align-items: center;
+	  color: white;
+	  font-size: 20px;">
+  Processing... Please wait
+</div>
+
+
+
+
+
 <script>
 
 let data= null;
@@ -268,6 +314,7 @@ function numberToWords(num) {
 */
 
 function saveReceipt() {
+	
     let requiredFields = document.querySelectorAll("input[required], textarea[required]");
     for (let field of requiredFields) {
         if (!field.value.trim()) {
@@ -276,6 +323,19 @@ function saveReceipt() {
             return;
         }
     }
+	
+	
+		try {
+			showOverlay();
+			saveDataOnCloud();
+			createReceiptPDF();
+			
+		} catch (err) {
+			showToast("❌ " + err.message, "red");
+		} finally {			
+			showToast("✅ Receipt downloaded successfully!" , "green");
+			hideOverlay();
+		}
 	
     data = {
         receiptNumber: document.getElementById("receiptNumber").value,
@@ -298,7 +358,14 @@ function saveReceipt() {
         paymentDetails: document.getElementById("paymentDetails").value
     };
 
-     fetch("https://script.google.com/macros/s/AKfycbw12x-98T8ZbJAiyLRQY7stDjYw-rls9cr0EbGUbBKHljhns9dW9OVFBW6sqh-rhrR4/exec", { 
+     
+
+}
+
+function saveDataOnCloud()
+{
+
+	fetch("https://script.google.com/macros/s/AKfycbw12x-98T8ZbJAiyLRQY7stDjYw-rls9cr0EbGUbBKHljhns9dW9OVFBW6sqh-rhrR4/exec", { 
         method: "POST",
         mode: "no-cors",
         headers: {
@@ -307,14 +374,14 @@ function saveReceipt() {
         body: JSON.stringify(data)
     }).then(() => {
         alert("✅ Receipt saved successfully to Google Sheet! Generating PDF.......");
+		showToast('✅ Receipt saved successfully to cloud! Generating PDF.......', 'green')
 		
 		createReceiptPDF()
 		
         clearForm();
-    }).catch(err => {
-        alert("❌ Error saving data: " + err);
+    }).catch(err => {		
+        showToast("❌ Error saving data: " + err, 'red');
     });
-
 }
 
 function clearForm() {
@@ -329,4 +396,3 @@ function clearForm() {
 
 </body>
 </html>
-
