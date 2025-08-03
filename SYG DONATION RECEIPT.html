@@ -110,7 +110,7 @@
 </style>
 
 <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
-<script src="https://graceful-zuccutto-12eda0.netlify.app/SYG_DONATION_RECEIPT.js"></script>
+<script src="D:\FZ\FZ\SYG\SYG_DONATION_RECEIPT.js"></script>
 </head>
 <body>
 
@@ -222,7 +222,7 @@
     <div class="form-row">
         <div class="form-group">
             <label>UPI / Cheque Details</label>
-            <textarea id="paymentDetails" rows="2" required></textarea>
+            <textarea id="paymentDetails" rows="2"></textarea>
         </div>
     </div>
 
@@ -298,7 +298,7 @@ function saveReceipt() {
         paymentDetails: document.getElementById("paymentDetails").value
     };
 
-    fetch("https://script.google.com/macros/s/AKfycbw12x-98T8ZbJAiyLRQY7stDjYw-rls9cr0EbGUbBKHljhns9dW9OVFBW6sqh-rhrR4/exec", { // Replace with your Google Script Web App URL
+     fetch("https://script.google.com/macros/s/AKfycbw12x-98T8ZbJAiyLRQY7stDjYw-rls9cr0EbGUbBKHljhns9dW9OVFBW6sqh-rhrR4/exec", { 
         method: "POST",
         mode: "no-cors",
         headers: {
@@ -329,4 +329,3 @@ function clearForm() {
 
 </body>
 </html>
-
