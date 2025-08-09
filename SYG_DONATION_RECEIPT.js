@@ -220,7 +220,7 @@
 
       // Total in words
       const totalY = startY - rowHeight * (rows.length + 1);
-      page.drawText("Total amount in words: " + numberToWords(totalAmount) + " only", {
+      page.drawText("Total amount in words: " + numberToWords(totalAmount) + " Rupees only", {
         x: 40, y: totalY - 10, size: 8, font: normalFont
       });
 
@@ -311,3 +311,4 @@
 		toast.style.visibility = "hidden";
 	  }, 5000);
 	}
+
