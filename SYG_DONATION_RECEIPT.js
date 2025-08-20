@@ -103,7 +103,9 @@
       const mobile = data.mobile;
       const city = data.city;
       const pincode = data.pincode;
-      const taluka = data.taluka
+      const taluka = data.taluka;
+	  const pan = data.pan;
+	  
 
       page.drawText("Name:", { x: 40, y: yCursor, size: 8, font: boldFont });
       page.drawText(name, { x: 140, y: yCursor, size: 8, font: normalFont });
@@ -115,6 +117,10 @@
 
       page.drawText("Mobile:", { x: 40, y: yCursor, size: 8, font: boldFont });
       page.drawText(mobile, { x: 140, y: yCursor, size: 8, font: normalFont });
+	  
+	  page.drawText("PAN:", { x: 280, y: yCursor, size: 8, font: boldFont });
+      page.drawText(pan, { x: 320, y: yCursor, size: 8, font: normalFont });
+	  
       yCursor -= 14;
 
       // City, Pincode, Taluka in one row
@@ -254,14 +260,15 @@
 		width: 50,
 		height: 50
 	  });
-	  
-	  
-	  page.drawImage(pngImage, {
+	 
+
+	 page.drawImage(pngImage, {
 		x: logo.right.xPos,
 		y: logo.right.yPos,
 		width: 50,
 		height: 50
 	  });
+	
 	
 
 
@@ -270,8 +277,12 @@
       const blob = new Blob([pdfBytes], { type: "application/pdf" });
       const link = document.createElement("a");
       link.href = URL.createObjectURL(blob);
-      link.download = "receipt.pdf";
+      
+	  let fileName = data.receiptNumber + ' - ' +   data.date.replaceAll("-", "");
+	  link.download = fileName+ ".pdf";
       link.click();
+	  
+	  showToast('✅ Receipt downladed successfully!', 'green');
     }
 
     // Number to words helper
@@ -291,11 +302,21 @@
     }
 	
 	function showOverlay() {
+		
+		const btnSave = document.getElementById("btnSave");
+		btnSave.disabled = true;
+		btnSave.innerHTML = `<div class="spinner"></div> Saving...`;
+		
 		document.getElementById('overlay').style.display = 'flex';
 	}
 
 	function hideOverlay() {
-	  document.getElementById('overlay').style.display = 'none';
+	
+		const btnSave = document.getElementById("btnSave");
+		btnSave.disabled = false;		
+		btnSave.innerHTML = "Save";
+		
+		document.getElementById('overlay').style.display = 'none';
 	}
 
 	
@@ -311,4 +332,3 @@
 		toast.style.visibility = "hidden";
 	  }, 5000);
 	}
-
