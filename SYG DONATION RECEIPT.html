@@ -327,6 +327,29 @@ function saveReceipt() {
 	
 		try {
 			showOverlay();
+			
+			  data = {
+				receiptNumber: document.getElementById("receiptNumber").value,
+				date: document.getElementById("date").value,
+				name: document.getElementById("name").value,
+				address: document.getElementById("address").value,
+				mobile: document.getElementById("mobile").value,
+				city: document.getElementById("city").value,
+				pincode: document.getElementById("pincode").value,
+				district: document.getElementById("district").value,
+				taluka: document.getElementById("taluka").value,
+				membershipFee: document.getElementById("membershipFee").value || 0,
+				donation: document.getElementById("donation").value || 0,
+				zakatFund: document.getElementById("zakatFund").value || 0,
+				educationFund: document.getElementById("educationFund").value || 0,
+				marriageFund: document.getElementById("marriageFund").value || 0,
+				widowFund: document.getElementById("widowFund").value || 0,
+				total: document.getElementById("total").value,
+				totalWords: document.getElementById("totalWords").value,
+				paymentDetails: document.getElementById("paymentDetails").value
+    };
+	
+			
 			saveDataOnCloud();
 			createReceiptPDF();
 			
@@ -337,26 +360,7 @@ function saveReceipt() {
 			hideOverlay();
 		}
 	
-    data = {
-        receiptNumber: document.getElementById("receiptNumber").value,
-        date: document.getElementById("date").value,
-        name: document.getElementById("name").value,
-        address: document.getElementById("address").value,
-        mobile: document.getElementById("mobile").value,
-        city: document.getElementById("city").value,
-        pincode: document.getElementById("pincode").value,
-        district: document.getElementById("district").value,
-        taluka: document.getElementById("taluka").value,
-        membershipFee: document.getElementById("membershipFee").value || 0,
-        donation: document.getElementById("donation").value || 0,
-        zakatFund: document.getElementById("zakatFund").value || 0,
-        educationFund: document.getElementById("educationFund").value || 0,
-        marriageFund: document.getElementById("marriageFund").value || 0,
-        widowFund: document.getElementById("widowFund").value || 0,
-        total: document.getElementById("total").value,
-        totalWords: document.getElementById("totalWords").value,
-        paymentDetails: document.getElementById("paymentDetails").value
-    };
+  
 
      
 
@@ -364,8 +368,11 @@ function saveReceipt() {
 
 function saveDataOnCloud()
 {
-
-	fetch("https://script.google.com/macros/s/AKfycbw12x-98T8ZbJAiyLRQY7stDjYw-rls9cr0EbGUbBKHljhns9dW9OVFBW6sqh-rhrR4/exec", { 
+		   
+	console.log(data);
+	console.log(JSON.stringify(data));	
+	
+	fetch("https://script.google.com/macros/s/AKfycbzHI5w1HjVaqesHG1D2GqvseEFMtTR6UiWXwy0fdJGSTUF4p5LnlpVLSKh4FUL9mw7r/exec", { 	
         method: "POST",
         mode: "no-cors",
         headers: {
