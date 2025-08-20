@@ -106,7 +106,19 @@
     }
     .btn:hover {
         opacity: 0.9;
+    }	
+	
+    .btn-save:hover:not(:disabled) {
+        background-color: #218838;
     }
+    .btn-save:active:not(:disabled) {
+        background-color: #1e7e34;
+    }
+    .btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+	
 	
 	#toast {
 		max-width: 80vw; /* Shrinks for small screens */
@@ -121,7 +133,8 @@
 </style>
 
 <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
-<script src="https://graceful-zuccutto-12eda0.netlify.app//SYG_DONATION_RECEIPT.js"></script>
+ <script src="https://graceful-zuccutto-12eda0.netlify.app//SYG_DONATION_RECEIPT.js"></script> 
+<!--<script src="D:\FZ\FZ\SYG\SYG_DONATION_RECEIPT.js"></script> -->
 </head>
 <body>
 
@@ -162,6 +175,10 @@
         <div class="form-group">
             <label>Mobile</label>
             <input type="tel" id="mobile" class="small-input" required>
+        </div>
+		<div class="form-group">
+            <label>PAN Number</label>
+            <input type="text" id="pan" class="small-input">
         </div>
     </div>
 
@@ -239,7 +256,7 @@
 
     <!-- Buttons -->
     <div class="button-group">
-        <button class="btn btn-save" onclick="saveReceipt()">💾 Save Receipt</button>
+        <button id='btnSave' class="btn btn-save" onclick="saveReceipt()">💾 Save Receipt</button>
         <button class="btn btn-clear" onclick="clearForm()">🗑️ Clear Form</button>
     </div>
 </div>
@@ -294,24 +311,6 @@ function calculateTotal() {
     document.getElementById("totalWords").value = numberToWords(total);
 }
 
-/*
-function numberToWords(num) {
-    if (num === 0) return "Zero";
-    let a = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 
-             'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
-    let b = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
-
-    function inWords(n) {
-        if (n < 20) return a[n];
-        if (n < 100) return b[Math.floor(n / 10)] + (n % 10 ? " " + a[n % 10] : "");
-        if (n < 1000) return a[Math.floor(n / 100)] + " Hundred" + (n % 100 ? " " + inWords(n % 100) : "");
-        if (n < 100000) return inWords(Math.floor(n / 1000)) + " Thousand" + (n % 1000 ? " " + inWords(n % 1000) : "");
-        if (n < 10000000) return inWords(Math.floor(n / 100000)) + " Lakh" + (n % 100000 ? " " + inWords(n % 100000) : "");
-        return inWords(Math.floor(n / 10000000)) + " Crore" + (n % 10000000 ? " " + inWords(n % 10000000) : "");
-    }
-    return inWords(Math.floor(num));
-}
-*/
 
 function saveReceipt() {
 	
@@ -324,7 +323,6 @@ function saveReceipt() {
         }
     }
 	
-	
 		try {
 			showOverlay();
 			
@@ -333,7 +331,7 @@ function saveReceipt() {
 				date: document.getElementById("date").value,
 				name: document.getElementById("name").value,
 				address: document.getElementById("address").value,
-				mobile: document.getElementById("mobile").value,
+				mobile: document.getElementById("mobile").value,				
 				city: document.getElementById("city").value,
 				pincode: document.getElementById("pincode").value,
 				district: document.getElementById("district").value,
@@ -346,7 +344,8 @@ function saveReceipt() {
 				widowFund: document.getElementById("widowFund").value || 0,
 				total: document.getElementById("total").value,
 				totalWords: document.getElementById("totalWords").value,
-				paymentDetails: document.getElementById("paymentDetails").value
+				paymentDetails: document.getElementById("paymentDetails").value,
+				pan: document.getElementById("pan").value
     };
 	
 			
@@ -359,20 +358,18 @@ function saveReceipt() {
 			showToast("✅ Receipt downloaded successfully!" , "green");
 			hideOverlay();
 		}
-	
-  
-
-     
 
 }
 
 function saveDataOnCloud()
 {
-		   
-	console.log(data);
-	console.log(JSON.stringify(data));	
+	showOverlay();
 	
-	fetch("https://script.google.com/macros/s/AKfycbzHI5w1HjVaqesHG1D2GqvseEFMtTR6UiWXwy0fdJGSTUF4p5LnlpVLSKh4FUL9mw7r/exec", { 	
+	console.log(data);
+	
+	
+	
+	fetch("https://script.google.com/macros/s/AKfycbzuiBb8kXkDhJeWM71bkqCV82fKAJDeB4fuKvEc95izWP7bePoxKkdG9jU-_7FHC9Uc/exec", {         	
         method: "POST",
         mode: "no-cors",
         headers: {
@@ -380,13 +377,16 @@ function saveDataOnCloud()
         },
         body: JSON.stringify(data)
     }).then(() => {
-        alert("✅ Receipt saved successfully to Google Sheet! Generating PDF.......");
-		showToast('✅ Receipt saved successfully to cloud! Generating PDF.......', 'green')
+        //alert("✅ Receipt saved successfully to Google Sheet! Generating PDF.......");
+		hideOverlay();
+		
+		showToast('✅ Receipt saved successfully to cloud! Generating PDF.......', 'green');
 		
 		createReceiptPDF()
 		
         clearForm();
     }).catch(err => {		
+		hideOverlay();
         showToast("❌ Error saving data: " + err, 'red');
     });
 }
